@@ -25,4 +25,4 @@ jobs:
       #finally build your app with the latest command
       - name: Build and test with Maven
         run: mvn clean install
-        working-directory: DevOps/simple-api-student-main/pom.xml
+        working-directory: C:/Users/betbe/Desktop/Montpellier cours/DevOps/simple-api-student-main
