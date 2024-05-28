@@ -48,13 +48,13 @@ jobs:
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
-          context: ./simple-api-student-main/database
+          context: ./
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api-database:latest
           push: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
-          context: ./simple-api-student-main/http
+          context: ./http
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api-httpd:latest
           push: ${{ github.ref == 'refs/heads/master' }}
