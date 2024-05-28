@@ -21,7 +21,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Build and test with Maven
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=devops-2024 -Dsonar.organization=devops-school -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file pom.xml
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=antoinebtb -Dsonar.organization=devops-school -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file pom.xml
         working-directory: ./simple-api-student-main
 
   build-and-push-docker-image:
