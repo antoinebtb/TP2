@@ -25,4 +25,4 @@ jobs:
       #finally build your app with the latest command
       - name: Build and test with Maven
         run: mvn clean install
-        working-directory: C:/Users/betbe/Desktop/Montpellier cours/DevOps/simple-api-student-main
+        working-directory: ./simple-api-student-main
