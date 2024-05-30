@@ -1,0 +1,19 @@
+---
+# tasks file for roles/API
+- name: Pull the API Image
+  docker_image:
+    name: antoinebtb/tp-devops-simple-api-backend
+    tag: latest
+    source: pull
+  vars:
+      ansible_python_interpreter: /usr/bin/python3
+
+- name: Run API
+  docker_container:
+    name: simple_api_student2
+    image: antoinebtb/tp-devops-simple-api-backend
+    networks: 
+      - name: "app-network"
+    state: started
+  vars:
+      ansible_python_interpreter: /usr/bin/python3

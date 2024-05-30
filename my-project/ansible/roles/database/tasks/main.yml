@@ -1,0 +1,20 @@
+---
+# tasks file for roles/BDD
+
+- name: Pull the BDD image
+  docker_image:
+    name: antoinebtb/tp-devops-simple-api-database
+    tag: latest
+    source: pull
+  vars:
+      ansible_python_interpreter: /usr/bin/python3
+
+- name: Run BDD
+  docker_container:
+    state: started
+    name: mon_postgres2
+    image: antoinebtb/tp-devops-simple-api-database
+    networks: 
+      - name: "app-network"
+  vars:
+      ansible_python_interpreter: /usr/bin/python3

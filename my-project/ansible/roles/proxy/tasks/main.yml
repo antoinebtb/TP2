@@ -1,0 +1,20 @@
+---
+# tasks file for roles/proxy
+- name: Pull the proxy container
+  docker_image:
+    name: antoinebtb/tp-devops-simple-api-httpd
+    tag: latest
+    source: pull
+  vars:
+      ansible_python_interpreter: /usr/bin/python3
+ 
+- name: Run the proxy container
+  docker_container:
+    name: httpd-1
+    image: antoinebtb/tp-devops-simple-api-httpd
+    ports:
+      - "80:80"
+    networks:
+      - name: "app-network"
+  vars:
+      ansible_python_interpreter: /usr/bin/python3
