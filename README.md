@@ -44,3 +44,13 @@ docker run -dit --name <nom_du_conteneur_http> -p 8080:80 <Tag_name_docker_image
 ```
 ### Docker Login and Image pushing 
 
+```bash
+docker login
+docker tag <Tag_name_docker_image_bdd> <your_dockerhub_username>/postgres_image:<tag>
+docker push <your_dockerhub_username>/postgres_image:<tag>
+docker tag <Tag_name_docker_image_backend> <your_dockerhub_username>/backend_api_image:<tag>
+docker push <your_dockerhub_username>/backend_api_image:<tag>
+docker tag <Tag_name_docker_image_http> <your_dockerhub_username>/http_server_image:<tag>
+docker push <your_dockerhub_username>/http_server_image:<tag>
+```
+
