@@ -50,7 +50,7 @@ docker-compose up
 ```
 
 
-### Docker Login and Image pushing 
+### 1-5 Docker Login and Image pushing 
 
 ```bash
 docker login
@@ -246,3 +246,29 @@ Finally we create a network to facilitate the communication between the containe
 networks:
   app-network:
 ```
+
+# Part 2 Discover Github Action
+
+## What are testcontainers?
+
+Testcontainers is a library that provides easy and lightweight APIs for bootstrapping local development and test dependencies with real services wrapped in Docker containers. Using Testcontainers, you can write tests that depend on the same services you use in production without mocks or in-memory services.
+
+# Part 3 Discover Ansible
+
+```yaml
+all:
+ vars:
+   ansible_user: centos
+   ansible_ssh_private_key_file: ~/.ssh/id_rsa
+ children:
+   prod:
+     hosts: antoine.betbeder.takima.cloud
+```
+
+## testing connectivity 
+
+```bash
+ansible all -i inventories/setup.yml -m ping
+```
+
+We finally gives roles in the playbook. with this for each roles, the setup will apply all the main.yml in each tasks. for each it will pull the container from docker hub then run it. 
