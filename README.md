@@ -42,6 +42,14 @@ docker run --name <nom_du_conteneur_backend> -p 8090:8080 --network app-network 
 ```bash
 docker run -dit --name <nom_du_conteneur_http> -p 8080:80 <Tag_name_docker_image_http>
 ```
+
+The best alternative is to use Docker-compose. We created a docker-compose file to build all the images and run all the docker container. You can use it by using in the right folder. This will setup the project with the container and images name that i created.
+
+```bash
+docker-compose up
+```
+
+
 ### Docker Login and Image pushing 
 
 ```bash
@@ -53,4 +61,20 @@ docker push <your_dockerhub_username>/backend_api_image:<tag>
 docker tag <Tag_name_docker_image_http> <your_dockerhub_username>/http_server_image:<tag>
 docker push <your_dockerhub_username>/http_server_image:<tag>
 ```
+## Why do we need a multistage build? And explain each step of this dockerfile.
 
+By handling the build and packaging within the Dockerfile, we encapsulate the entire build process in one script. 
+
+### Explanation of Each Step in the Dockerfile
+
+## Build Stage:
+
+```dockerfile
+FROM maven:3.8.6-amazoncorretto-17 AS myapp-build
+ENV MYAPP_HOME /opt/myapp
+WORKDIR $MYAPP_HOME
+COPY pom.xml .
+COPY src ./src
+RUN mvn package -DskipTests
+
+```
