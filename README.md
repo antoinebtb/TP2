@@ -76,5 +76,27 @@ WORKDIR $MYAPP_HOME
 COPY pom.xml .
 COPY src ./src
 RUN mvn package -DskipTests
-
 ```
+##### FROM maven:3.8.6-amazoncorretto-17 AS myapp-build:
+
+This line starts the first stage of the build using a Maven image with Amazon Corretto 17. The image includes both the JDK and Maven, which are required to build Java applications. AS myapp-build names this stage so that it can be referenced later.
+
+##### ENV MYAPP_HOME /opt/myapp: 
+
+Sets an environment variable MYAPP_HOME which specifies the directory where the application will be built.
+
+##### WORKDIR $MYAPP_HOME:
+
+ Sets the working directory for the subsequent instructions. In this case, it's set to /opt/myapp, where the source code and build artifacts will reside.
+
+##### COPY pom.xml .:
+
+ Copies the Maven project descriptor file (pom.xml) to the current working directory in the image (which is /opt/myapp).
+
+##### COPY src ./src:
+
+ Copies the application's source code into the src directory of the working directory in the image.
+
+##### RUN mvn package -DskipTests:
+
+ Runs Maven to build the project and package it into a JAR file, skipping tests to speed up the build process.
