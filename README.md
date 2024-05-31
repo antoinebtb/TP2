@@ -79,7 +79,7 @@ RUN mvn package -DskipTests
 ```
 ##### FROM maven:3.8.6-amazoncorretto-17 AS myapp-build:
 
-This line starts the first stage of the build using a Maven image with Amazon Corretto 17. The image includes both the JDK and Maven, which are required to build Java applications. AS myapp-build names this stage so that it can be referenced later.
+The image includes both the JDK and Maven, which are required to build Java applications. AS myapp-build names this stage so that it can be referenced later.
 
 ##### ENV MYAPP_HOME /opt/myapp: 
 
@@ -100,3 +100,149 @@ Sets an environment variable MYAPP_HOME which specifies the directory where the 
 ##### RUN mvn package -DskipTests:
 
  Runs Maven to build the project and package it into a JAR file, skipping tests to speed up the build process.
+
+ ## Run Stage:
+
+ ```dockerfile
+FROM amazoncorretto:17
+ENV MYAPP_HOME /opt/myapp
+WORKDIR $MYAPP_HOME
+COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar
+ENTRYPOINT ["java", "-jar", "myapp.jar"]
+```
+
+##### FROM amazoncorretto:17: 
+
+Starts the second stage of the build using Amazon Corretto 17, which is a production-grade Java environment. This image is used for running the application and does not include build tools like Maven.
+
+##### ENV MYAPP_HOME /opt/myapp and WORKDIR $MYAPP_HOME:
+
+These commands are repeated to set up the environment for the runtime stage.
+
+##### COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar:
+
+ Copies the JAR file from the build stage (myapp-build) to the runtime image. This is where the multistage build shines, as only the compiled JAR file is moved to the new stage, leaving behind all the build-specific tools and dependencies.
+
+##### ENTRYPOINT ["java", "-jar", "myapp.jar"]:
+
+ Sets the default command to run when the container starts, which is to execute the Java application.
+
+ ## 1-3 Document docker-compose most important commands. 1-4 Document your docker-compose file.
+
+ ### Docker Compose up
+
+ Command to Builds, creates, starts, and attaches to containers for a service.
+
+```bash
+docker-compose up
+```
+
+ ### Docker Compose down
+
+Command to stop containers and removes containers, networks, volumes and images created before by up
+
+```bash
+docker-compose down
+```
+
+### Documents of my docker-compose file
+
+#### Backend Services
+
+```dockerfile
+services:
+  backend:
+    build:
+      context: "C:\\Users\\betbe\\Desktop\\Montpellier cours\\DevOps\\simple-api-student-main"
+    container_name: "simple_api_student2"
+    networks:
+      - app-network
+    depends_on:
+      - database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://mon_postgres3:5432/db
+      - SPRING_DATASOURCE_USERNAME=usr
+      - SPRING_DATASOURCE_PASSWORD=pwd
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_DATABASE-PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+```
+
+##### build.context: 
+
+Specifies the directory containing the Dockerfile for building the backend image.
+
+##### container_name: 
+
+Names the container as simple_api_student2.
+networks: Connects to the app-network.
+
+##### depends_on: 
+
+Indicates dependency on the database service, ensuring it starts first.
+
+##### environment: 
+
+Sets environment variables for the Spring application, configuring database connectivity and Hibernate behavior.
+
+#### Database Services
+
+```dockerfile
+  database:
+    build:
+      context: "C:\\Users\\betbe\\Desktop\\Montpellier cours\\DevOps"
+    container_name: "mon_postgres3"
+    networks:
+      - app-network
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
+```
+
+##### build.context:
+ 
+ Directory containing the Dockerfile for the PostgreSQL database.
+
+##### container_name: 
+
+Sets the container name to mon_postgres3.
+
+##### environment: 
+
+Configures PostgreSQL with a specific database, user, and password.
+
+#### HTTPD Service (Apache)
+
+```dockerfile
+    httpd:
+    build:
+      context: "C:\\Users\\betbe\\Desktop\\Montpellier cours\\DevOps\\http"
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+      - database
+```
+
+##### build.context: 
+
+Path to the Dockerfile for the Apache HTTP server.
+
+##### ports:
+
+ Maps port 80 on the host to port 80 on the container, allowing access to the HTTP server.
+
+##### depends_on: 
+
+Ensures httpd starts after backend and database services are up.
+
+#### Networks
+
+Finally we create a network to facilitate the communication between the containers 
+
+```dockerfile
+networks:
+  app-network:
+```
